@@ -9,7 +9,7 @@
      [:id "varchar(32) PRIMARY KEY"]
      [:pass "varchar(100)"])))
 
-(create-users-table) ;; 
+
 
 
 
