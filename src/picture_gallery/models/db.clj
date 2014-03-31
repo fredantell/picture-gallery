@@ -7,4 +7,10 @@
    :user "gallery"
    :password "gallery"})
 
+(defn create-user [user]
+  (sql/with-connection
+    db
+    (sql/insert-record :users user)))
+
+
 

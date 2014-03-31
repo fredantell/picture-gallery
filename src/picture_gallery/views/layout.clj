@@ -15,7 +15,9 @@
 (defn common [& content]
   (base
    (if-let [user (session/get :user)]
-     [:p user]
+     [:div
+      [:span "Hi, " user "!"]
+      [:span.logoutLink "Logout?"]]
      (link-to "/register" "register"))
    content))
 
