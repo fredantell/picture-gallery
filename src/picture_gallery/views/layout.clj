@@ -1,5 +1,6 @@
 (ns picture-gallery.views.layout
-  (:require [hiccup.page :refer [html5 include-css]]))
+  (:require [hiccup.page :refer [html5 include-css]])
+  (:require [noir.session :as session]))
 
 (defn common [& body]
   (html5

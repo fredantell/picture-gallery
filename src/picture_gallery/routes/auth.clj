@@ -14,10 +14,10 @@
             (text-field "id" id)
             [:br]
             (label "pass" "password")
-            (password-field "pass" pass)
+            (password-field "pass")
             [:br]
             (label "pass1" "retype password")
-            (password-field "pass1" pass1)
+            (password-field "pass1")
             [:br]
             (submit-button "create account"))))
 
@@ -30,4 +30,7 @@
         (registration-page))
   (POST "/register" [id pass pass1]
         (handle-registration id pass pass1)))
+
+
+
 
