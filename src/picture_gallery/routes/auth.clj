@@ -26,12 +26,12 @@
             (label "user-id" "user id")
             (text-field "id" id)
             [:br]
-            (label "pass" "password")
             (vali/on-error :pass error-item)
+            (label "pass" "password")
             (password-field "pass")
             [:br]
-            (label "pass1" "retype password")
             (vali/on-error :pass1 error-item)
+            (label "pass1" "retype password")
             (password-field "pass1")
             [:br]
             (submit-button "create account"))))
