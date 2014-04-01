@@ -89,8 +89,6 @@
         (handle-registration id pass pass1))
   (POST "/login" [id pass]
         (handle-login id pass))
-  (GET "/login" []
-       (login-page))
   (GET "/logout" []
        ( handle-logout)))
 

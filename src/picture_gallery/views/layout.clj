@@ -33,18 +33,4 @@
    (display-session-links)
    content))
 
-;; Testing/Scratch
-
-(display-session-links) ;; 
-(logout-links "Fredrik") ;; [:div [:a {:href #<URI /logout>} ("logout Fredrik")]]
-(login-and-register-links) ;; [:div [:a {:href #<URI /register>}
-;; ("register")] [:form {:method "POST", :action #<URI /login>}
-;; [:input {:placeholder "screen name", :type "text", :name "id", :id
-;; "id", :value nil}] [:input {:placeholder "password", :type
-;; "password", :name "pass", :id "pass", :value nil}] [:input {:type
-;; "submit", :value "login"}]]]
-
-
-
-
 
