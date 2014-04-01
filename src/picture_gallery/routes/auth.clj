@@ -78,6 +78,9 @@
            (resp/redirect "/"))
       (login-page id))))
 
+(defn handle-logout []
+  (session/clear!)
+  (resp/redirect "/"))
 
 (defroutes auth-routes
   (GET "/register" []
@@ -89,7 +92,5 @@
   (GET "/login" []
        (login-page))
   (GET "/logout" []
-        (do
-          (session/clear!)
-          (resp/redirect "/login"))))
+       ( handle-logout)))
 
