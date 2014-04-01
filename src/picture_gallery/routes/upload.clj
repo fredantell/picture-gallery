@@ -33,11 +33,12 @@
     "Choose a file to upload"
     "Success!"))
 
-;; (validate-uploaded-file) ;; 
-
-(defn handle-upload [{:keys [filename :as file]}]
-  (println file)
-  (upload-page (validate-uploaded-file filename)))
+(defn handle-upload [file]
+  ;;file is the :file portion of a ring response map
+  (let [filename (:filename (:file file))]
+    (println file)
+    (println filename)
+    (upload-page (validate-uploaded-file filename))))
 
 (defroutes upload-routes
   (GET "/upload" [info] (upload-page info))
