@@ -28,20 +28,37 @@
             (submit-button "upload"))))
 
 
-(defn validate-uploaded-file [filename]
+(defn validate-uploaded-file [filename file]
   (if (empty? filename)
     "Choose a file to upload"
-    "Success!"))
+    (try
+      (noir.io/upload-file (gallery-path) file :create-path? true)
+      (hiccup.element/image
+       {:height "150px"}
+       (str "/img/" (url-encode filename)))
+      (catch Exception ex
+        (str "error uploading file " (.getMessage ex))))))
+
+;;(validate-uploaded-file "cats.jpg" {}) ;; "error uploading file "
+;;(def mock-file-map { :file:size 0, :tempfile "tmpfilename" :content-type " application/octet-stream," :filenamede "name"})
+
+;;(validate-uploaded-file "name"  mock-file-map)
+(defn serve-file [file-name]
+  (do  (println "Fn Serve-file tried to serve: " file-name)
+       (file-response (str (gallery-path) File/separator file-name))))
+
+
 
 (defn handle-upload [file]
   ;;file is the :file portion of a ring response map
   (let [filename (:filename (:file file))]
     (println file)
     (println filename)
-    (upload-page (validate-uploaded-file filename))))
+    (upload-page (validate-uploaded-file filename file))))
 
 (defroutes upload-routes
   (GET "/upload" [info] (upload-page info))
-  (POST "/upload" {params :params} (handle-upload params)))
+  (POST "/upload" {params :params} (handle-upload params))
+  (GET "/img/:file-name" [file-name] (serve-file file-name)))
 
 

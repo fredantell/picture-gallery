@@ -2,5 +2,7 @@
 
 
 (declare galleries)
-(declare gallery-path)
+
+(defn gallery-path []
+  "galleries")
 
