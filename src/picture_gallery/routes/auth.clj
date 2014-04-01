@@ -41,7 +41,6 @@
                      (password-field "pass1"))
             (submit-button "create account"))))
 
-
 (defn format-error [id ex]
   (cond (and (instance? org.postgresql.util.PSQLException ex)
              (= 0 (.getErrorCode ex)))
@@ -60,12 +59,62 @@
             (registration-page)))
     (registration-page id)))
 
+
+(declare handle-login)
+(declare login-page)
+
 (defroutes auth-routes
   (GET "/register" []
         (registration-page))
   (POST "/register" [id pass pass1]
-        (handle-registration id pass pass1)))
+        (handle-registration id pass pass1))
+  (POST "/login" [id pass]
+        (handle-login id pass))
+  (GET "/login" []
+       (login-page))
+  (GET "/logout" []
+        (do
+          (session/clear!)
+          (resp/redirect "/login"))))
 
 
 
 
+;; Add the ability to login
+;;X ..Create route for logging in..post to /login
+;; ..handle-login function
+;; ....takes the id/pass
+;; ....checks to see if user exists and pass is correct
+;; ......if correct then set session and redirect to /
+;; ......if false then display error msg "id/pass not valid"
+
+(defn login-page [& [id]]
+  (layout/common
+   (form-to [:post "/login"]
+            (control :id
+                     (label "user-id" "user id")
+                     (text-field "id" id))
+            (control :pass
+                     (label "pass" "password")
+                     (password-field "pass"))
+            (submit-button "login"))))
+
+(defn handle-login [id pass]
+  (let [user (db/get-user id)]
+    (if (and user
+             (crypt/compare pass (:pass user)))
+      (do  (session/put! :user id)
+           (resp/redirect "/"))
+      (login-page id))))
+
+
+
+;;(handle-login "Denise" "ee")
+;; 
+;;
+
+  
+;;(db/get-user "Denise")
+;; {:id "Denise"}
+;;(db/get-user "sfdDenise")
+;; nil

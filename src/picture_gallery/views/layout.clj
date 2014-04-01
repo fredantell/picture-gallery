@@ -3,7 +3,6 @@
   (:require [hiccup.element :refer [link-to]])
   (:require [noir.session :as session]))
 
-
 (defn base [& body]
   (html5
     [:head
@@ -17,7 +16,7 @@
    (if-let [user (session/get :user)]
      [:div
       [:span "Hi, " user "!"]
-      [:span.logoutLink "Logout?"]]
+      (link-to "/logout"  [:span.logoutLink "Logout?"])]
      (link-to "/register" "register"))
    content))
 
