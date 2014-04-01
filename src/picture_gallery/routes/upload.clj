@@ -33,11 +33,12 @@
     "Choose a file to upload"
     "Success!"))
 
-;; (validate-uploaded-file) ;; 
+(validate-uploaded-file nil) ;;
 
-(defn handle-upload [{:keys [filename :as file]}]
+(defn handle-upload [{:keys [filename] :as file}]
   (println file)
-  (upload-page (validate-uploaded-file filename)))
+  (println filename)
+  (upload-page (validate-uploaded-file (:filename file))))
 
 (defroutes upload-routes
   (GET "/upload" [info] (upload-page info))
