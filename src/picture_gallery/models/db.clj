@@ -7,10 +7,18 @@
    :user "gallery"
    :password "gallery"})
 
-(defn create-user [user]
-  (sql/with-connection
-    db
-    (sql/insert-record :users user)))
+(defmacro with-db [f & body]
+  `(sql/with-connection ~db (~f ~@body)))
 
+(defn create-user [user]
+  (with-db
+    sql/insert-record
+    :users user))
+
+(defn get-user [id]
+  (with-db
+    sql/with-query-results
+    res ["select id from users where id = ?" id]
+    (first res)))
 
 
