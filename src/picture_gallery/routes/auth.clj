@@ -59,35 +59,6 @@
             (registration-page)))
     (registration-page id)))
 
-
-(declare handle-login)
-(declare login-page)
-
-(defroutes auth-routes
-  (GET "/register" []
-        (registration-page))
-  (POST "/register" [id pass pass1]
-        (handle-registration id pass pass1))
-  (POST "/login" [id pass]
-        (handle-login id pass))
-  (GET "/login" []
-       (login-page))
-  (GET "/logout" []
-        (do
-          (session/clear!)
-          (resp/redirect "/login"))))
-
-
-
-
-;; Add the ability to login
-;;X ..Create route for logging in..post to /login
-;; ..handle-login function
-;; ....takes the id/pass
-;; ....checks to see if user exists and pass is correct
-;; ......if correct then set session and redirect to /
-;; ......if false then display error msg "id/pass not valid"
-
 (defn login-page [& [id]]
   (layout/common
    (form-to [:post "/login"]
@@ -108,13 +79,17 @@
       (login-page id))))
 
 
+(defroutes auth-routes
+  (GET "/register" []
+        (registration-page))
+  (POST "/register" [id pass pass1]
+        (handle-registration id pass pass1))
+  (POST "/login" [id pass]
+        (handle-login id pass))
+  (GET "/login" []
+       (login-page))
+  (GET "/logout" []
+        (do
+          (session/clear!)
+          (resp/redirect "/login"))))
 
-;;(handle-login "Denise" "ee")
-;; 
-;;
-
-  
-;;(db/get-user "Denise")
-;; {:id "Denise"}
-;;(db/get-user "sfdDenise")
-;; nil
