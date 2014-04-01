@@ -60,7 +60,7 @@
     (registration-page id)))
 
 (defn login-page [& [id]]
-  (layout/common
+  (layout/base
    (form-to [:post "/login"]
             (control :id
                      (label "user-id" "user id")
