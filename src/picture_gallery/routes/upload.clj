@@ -32,8 +32,15 @@
   (let [img (ImageIO/read file)
         img-width (.getWidth img)
         img-height (.getHeight img)
-        ratio (/ thumb0size img-height)]
+        ratio (/ thumb-size img-height)]
     (scale img ratio (int (* img-width ratio)) thumb-size)))
+
+(defn save-thumbnail [{:keys [filename]}]
+  (let [path (str (gallery-path) File/separator)]
+    (ImageIO/write
+     (scale-image (io/input-stream (str path filename)))
+     "jpeg"
+     (File. (str path thumb-prefix filename)))))
 
 (defn upload-page [info]
   (layout/common
@@ -44,11 +51,15 @@
             (file-upload :file)
             (submit-button "upload"))))
 
+(defn upload-image [file]
+  (noir.io/upload-file (gallery-path) file :create-path? true))
+
 (defn validate-uploaded-file [filename file]
   (if (empty? filename)
     "Choose a file to upload"
     (try
-      (noir.io/upload-file (gallery-path) file :create-path? true)
+      (upload-image file)
+      (save-thumbnail file)
       (hiccup.element/image
        {:height "150px"}
        (str "/img/" (url-encode filename)))
