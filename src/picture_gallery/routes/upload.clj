@@ -11,12 +11,29 @@
             [ring.util.response :refer [file-response]]
             [picture-gallery.views.layout :as layout]
             [picture-gallery.models.db :as db]
-            [picture-gallery.utils :refer [galleries gallery-path]])
+            [picture-gallery.utils :refer [thumb-size thumb-prefix galleries gallery-path]])
   (:import [java.io File FileInputStream FileOutputStream]
            [java.awt.image AffineTransformOp BufferedImage]
            java.awt.RenderingHints
            java.awt.geom.AffineTransform
            javax.imageio.ImageIO))
+
+
+(defn scale [img ratio width height]
+  (let [scale (AffineTransform/getScaleInstance (double ratio) (double ratio))
+        transform-op (AffineTransformOp.
+                      scale AffineTransformOp/TYPE_BILINEAR)]
+    (.filter transform-op img (BufferedImage. width height (.getType img)))))
+
+
+
+
+(defn scale-image [file]
+  (let [img (ImageIO/read file)
+        img-width (.getWidth img)
+        img-height (.getHeight img)
+        ratio (/ thumb0size img-height)]
+    (scale img ratio (int (* img-width ratio)) thumb-size)))
 
 (defn upload-page [info]
   (layout/common
@@ -26,7 +43,6 @@
             [:post "/upload"]
             (file-upload :file)
             (submit-button "upload"))))
-
 
 (defn validate-uploaded-file [filename file]
   (if (empty? filename)

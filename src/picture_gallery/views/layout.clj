@@ -5,8 +5,10 @@
   (:require [hiccup.form :refer [form-to text-field password-field submit-button]]))
 
 
-(defn logout-links [user]
-  [:div (link-to "/logout" (str "logout " user))])
+(defn logout-upload-links [user]
+  [:div
+   [:div (link-to "/logout" (str "logout " user))]
+   [:div (link-to "/upload" "upload images")]])
 
 (defn login-and-register-links []
   [:div (link-to "/register" (str "register"))
@@ -17,7 +19,7 @@
 
 (defn display-session-links []
   (if-let [user (session/get :user)]
-    (logout-links user)
+    (logout-upload-links user)
     (login-and-register-links)))
 
 (defn base [& body]
