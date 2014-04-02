@@ -29,7 +29,10 @@
 
 
 (defn validate-uploaded-file [filename file]
-  (if (empty? filename)
+  (println "Debug:\n Path: " (gallery-path)
+               "\nFile Map: " file
+               "\nOther map: " {:create-path true})
+    (if (empty? filename)
     "Choose a file to upload"
     (try
       (noir.io/upload-file (gallery-path) file :create-path? true)
@@ -47,18 +50,16 @@
   (do  (println "Fn Serve-file tried to serve: " file-name)
        (file-response (str (gallery-path) File/separator file-name))))
 
-
-
 (defn handle-upload [file]
   ;;file is the :file portion of a ring response map
-  (let [filename (:filename (:file file))]
+  (let [filename (:filename file)]
     (println file)
     (println filename)
     (upload-page (validate-uploaded-file filename file))))
 
 (defroutes upload-routes
   (GET "/upload" [info] (upload-page info))
-  (POST "/upload" {params :params} (handle-upload params))
+  (POST "/upload" {params :params} (handle-upload (:file  params)))
   (GET "/img/:file-name" [file-name] (serve-file file-name)))
 
 
