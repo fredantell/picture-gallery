@@ -29,10 +29,7 @@
 
 
 (defn validate-uploaded-file [filename file]
-  (println "Debug:\n Path: " (gallery-path)
-               "\nFile Map: " file
-               "\nOther map: " {:create-path true})
-    (if (empty? filename)
+  (if (empty? filename)
     "Choose a file to upload"
     (try
       (noir.io/upload-file (gallery-path) file :create-path? true)
@@ -41,9 +38,6 @@
        (str "/img/" (url-encode filename)))
       (catch Exception ex
         (str "error uploading file " (.getMessage ex))))))
-
-;;(validate-uploaded-file "cats.jpg" {}) ;; "error uploading file "
-;;(def mock-file-map { :file:size 0, :tempfile "tmpfilename" :content-type " application/octet-stream," :filenamede "name"})
 
 ;;(validate-uploaded-file "name"  mock-file-map)
 (defn serve-file [file-name]
