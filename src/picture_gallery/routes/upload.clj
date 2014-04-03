@@ -25,9 +25,6 @@
                       scale AffineTransformOp/TYPE_BILINEAR)]
     (.filter transform-op img (BufferedImage. width height (.getType img)))))
 
-
-
-
 (defn scale-image [file]
   (let [img (ImageIO/read file)
         img-width (.getWidth img)
@@ -62,12 +59,11 @@
       (save-thumbnail file)
       (hiccup.element/image
        {:height "150px"}
-       (str "/img/" (url-encode filename)))
+       (str "/img/" (session/get :user) File/separator (url-encode filename)))
       (catch Exception ex
         (str "error uploading file " (.getMessage ex))))))
 
-;;(validate-uploaded-file "name"  mock-file-map)
-(defn serve-file [file-name]
+(defn serve-file [user-id file-name]
   (do  (println "Fn Serve-file tried to serve: " file-name)
        (file-response (str (gallery-path) File/separator file-name))))
 
@@ -81,6 +77,6 @@
 (defroutes upload-routes
   (GET "/upload" [info] (upload-page info))
   (POST "/upload" {params :params} (handle-upload (:file  params)))
-  (GET "/img/:file-name" [file-name] (serve-file file-name)))
+  (GET "/img/:user-id/:file-name" [user-id file-name] (serve-file user-id file-name)))
 
 

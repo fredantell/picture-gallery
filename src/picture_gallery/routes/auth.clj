@@ -4,10 +4,12 @@
             [picture-gallery.routes.home :refer :all]
             [picture-gallery.views.layout :as layout]
             [picture-gallery.models.db :as db]
+            [picture-gallery.utils :as pg-utils]
             [noir.session :as session]
             [noir.response :as resp]
             [noir.validation :as vali]
-            [noir.util.crypt :as crypt]))
+            [noir.util.crypt :as crypt])
+  (:import java.io.File))
 
 (defn valid? [id pass pass1]
   (vali/rule (vali/has-value? id)
@@ -48,11 +50,17 @@
         :else
         "An error has occured while processing the request."))
 
+(defn create-gallery-path [id]
+  (let [user-path (File. (pg-utils/gallery-path))]
+    (if-not (.exists user-path) (.mkdirs user-path))
+    (str (.getAbsolutePath user-path) File/separator)))
+
 (defn handle-registration [id pass pass1]
   (if (valid? id pass pass1)
     (try  (do
             (db/create-user {:id id :pass (crypt/encrypt pass)})
             (session/put! :user id)
+            (create-gallery-path id)
             (resp/redirect "/"))
           (catch Exception ex
             (vali/rule false [:id (format-error id ex)])
