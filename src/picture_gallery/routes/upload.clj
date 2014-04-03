@@ -75,8 +75,8 @@
     (upload-page (validate-uploaded-file filename file))))
 
 (defroutes upload-routes
-  (GET "/upload" [info] (upload-page info))
-  (POST "/upload" {params :params} (handle-upload (:file  params)))
+  (GET "/upload" [info] (restricted (upload-page info)))
+  (POST "/upload" {params :params} (restricted (handle-upload (:file  params))))
   (GET "/img/:user-id/:file-name" [user-id file-name] (serve-file user-id file-name)))
 
 
