@@ -11,7 +11,7 @@
             [ring.util.response :refer [file-response]]
             [picture-gallery.views.layout :as layout]
             [picture-gallery.models.db :as db]
-            [picture-gallery.utils :refer [thumb-size thumb-prefix galleries gallery-path]])
+            [picture-gallery.utils :refer [thumb-size thumb-prefix galleries gallery-path image-uri thumb-uri]])
   (:import [java.io File FileInputStream FileOutputStream]
            [java.awt.image AffineTransformOp BufferedImage]
            java.awt.RenderingHints
@@ -57,6 +57,7 @@
     (try
       (upload-image file)
       (save-thumbnail file)
+      #_(db/add-image (session/get :user) filename)
       (hiccup.element/image
        {:height "150px"}
        (str "/img/" (session/get :user) File/separator (url-encode filename)))
