@@ -1,6 +1,7 @@
 # picture-gallery
 
-FIXME
+Picture gallery project from Clojure Web Development book.
+In progress..
 
 ## Prerequisites
 
